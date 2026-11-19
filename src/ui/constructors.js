@@ -2,6 +2,21 @@
 // constructors macros ///////////////////////
 //////////////////////////////////////////////
 
+export function addLoreMessage(text, highlight = true) {
+    const loreList = document.getElementById("loreList");
+    const lore = document.createElement("li");
+    lore.classList.add("lore");
+
+    if (highlight) {
+        lore.classList.add("newLore");
+    }
+
+    lore.textContent = text;
+    loreList.appendChild(lore);
+
+    return lore;
+}
+
 export function newButton(IDname, texto, funcao) {
     const newDiv = document.createElement("div");
     newDiv.id = IDname;
@@ -25,8 +40,8 @@ export function newHoldableButton(IDname, texto, funcao, intervalTime) {
 
     function onHold() {
         if (!intervalId) {
-            // Intentionally waits for the first interval before executing.
-            // Holding is meant to be slower than click-spamming.
+            // Short taps intentionally do nothing. The action begins only after
+            // the player has held the button for the configured interval.
             intervalId = setInterval(funcao, intervalTime);
         }
     }
@@ -46,12 +61,12 @@ export function newHoldableButton(IDname, texto, funcao, intervalTime) {
     return newDiv;
 }
 
-export function newStatusEffect(effectId, imageName, title, descr, amountBuffs, curse = false) {
+export function newStatusEffect(effectId, imageName, title, descr, amountLines, curse = false) {
     const statusLists = document.getElementsByClassName("statusList");
 
     for (const statusList of statusLists) {
         const effect = document.createElement("div");
-        effect.id = effectId;
+        effect.dataset.effectId = effectId;
         effect.className = "status";
 
         if (curse === true) {
@@ -70,17 +85,17 @@ export function newStatusEffect(effectId, imageName, title, descr, amountBuffs, 
         const effectDescr = document.createElement("div");
         effectDescr.textContent = descr;
 
-        const effectBuffs = document.createElement("ul");
+        const effectDetails = document.createElement("ul");
 
-        for (let i = 0; i < amountBuffs; i++) {
+        for (let i = 0; i < amountLines; i++) {
             const newLi = document.createElement("li");
-            newLi.className = "effect_buff_text";
-            effectBuffs.appendChild(newLi);
+            newLi.className = "effect_detail_text";
+            effectDetails.appendChild(newLi);
         }
 
         effectBlock.appendChild(effectDescrTitle);
         effectBlock.appendChild(effectDescr);
-        effectBlock.appendChild(effectBuffs);
+        effectBlock.appendChild(effectDetails);
 
         effect.appendChild(effectImage);
         effect.appendChild(effectBlock);

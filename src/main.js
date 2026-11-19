@@ -1,5 +1,5 @@
 import { STATUS_EFFECT_DEFINITIONS } from "./data/statusEffects.js";
-import { focus } from "./game/actions.js";
+import { absorbEssence, condenseEssence } from "./game/actions.js";
 import { progressionDetection } from "./game/progression.js";
 import { gameVariables } from "./game/state.js";
 import {
@@ -9,38 +9,39 @@ import {
     startAutosave
 } from "./systems/save.js";
 import {
+    addLoreMessage,
     newButton,
     newHoldableButton,
     newStatusEffect,
     screen
 } from "./ui/constructors.js";
 import {
+    updateButtonsDisplay,
     updateEffectsDisplay,
     updateResourcesDisplay
 } from "./ui/render.js";
 
 function addWelcomeLore() {
-    const loreList = document.getElementById("loreList");
-    const welcomeLore = document.createElement("li");
-    welcomeLore.classList.add("lore");
-
     if (gameVariables.wipingSave) {
-        welcomeLore.classList.add("newLore");
-        welcomeLore.textContent = "You wake up in the middle of nowhere.";
+        addLoreMessage("You wake up in the middle of nowhere.");
         gameVariables.wipingSave = false;
     }
     else {
-        welcomeLore.textContent = "You wake up where you left off.";
+        addLoreMessage("You wake up where you left off.", false);
     }
-
-    loreList.appendChild(welcomeLore);
 }
 
 function createGameButtons() {
-    const btnFocus = newHoldableButton("btn_focus", "Focus", focus, 500);
+    const btnAbsorbEssence = newHoldableButton(
+        "btn_absorbEssence",
+        "Absorb Essence",
+        absorbEssence,
+        500
+    );
+    newButton("btn_condenseEssence", "Condense Essence", condenseEssence);
     const btnSaveWipe = newButton("btn_saveWipe", "TERMINATE SAVE", saveWipe);
 
-    btnFocus.classList.add("_visible");
+    btnAbsorbEssence.classList.add("_visible");
     btnSaveWipe.classList.add("_visible");
 }
 
@@ -51,7 +52,7 @@ function createStatusEffects() {
             definition.imageName,
             definition.title,
             definition.description,
-            definition.amountBuffs,
+            definition.amountLines,
             definition.curse
         );
     }
@@ -67,6 +68,8 @@ function gameOnLoad() {
 
     updateResourcesDisplay();
     updateEffectsDisplay();
+    updateButtonsDisplay();
+    progressionDetection();
 
     setInterval(updateResourcesDisplay, 100);
     setInterval(updateEffectsDisplay, 100);

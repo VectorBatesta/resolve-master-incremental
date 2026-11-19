@@ -1,14 +1,16 @@
 export const STATUS_EFFECT_DEFINITIONS = {
-    focusHindrance: {
+    essenceHindrance: {
         imageName: "placeholder.png",
-        title: "Focus Hindrance",
-        description: "Your focus is being obstructed by something.",
-        amountBuffs: 2,
+        title: "Essence Accumulation Hindrance",
+        description: "Something is resisting your attempts to accumulate essence.",
+        amountLines: 1,
         curse: true,
-        getBuffTexts(gameVariables) {
+        isVisible(gameVariables) {
+            return gameVariables.status.essenceHindranceRevealed;
+        },
+        getDetailTexts(gameVariables) {
             return [
-                "(buff0) Focus interference: " + gameVariables.modifiers.focusHindrance,
-                "(buff1) Focus interference: " + gameVariables.resources.essence.amount.toFixed(2)
+                "Curse Power: " + gameVariables.modifiers.essenceHindrance
             ];
         }
     }

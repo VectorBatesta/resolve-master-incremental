@@ -1,6 +1,6 @@
 import { RESOURCE_DEFINITIONS } from "../data/resources.js";
 
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
 
 function createDefaultResources() {
     const resources = {};
@@ -18,9 +18,20 @@ function createDefaultResources() {
 export function createNewSave() {
     return {
         version: SAVE_VERSION,
-        status: {},
+        status: {
+            essenceHindranceRevealed: false
+        },
+        unlocks: {
+            essenceCondensation: false
+        },
+        progression: {
+            triggers: {
+                essenceAbsorptionStarted: false,
+                firstCondensedEssence: false
+            }
+        },
         modifiers: {
-            focusHindrance: 100
+            essenceHindrance: 100
         },
         resources: createDefaultResources(),
         wipingSave: true

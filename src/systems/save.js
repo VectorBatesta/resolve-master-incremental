@@ -36,6 +36,19 @@ export function migrateSave(save) {
         return defaults;
     }
 
+    const savedModifiers = {
+        ...(save.modifiers || {})
+    };
+
+    if (
+        savedModifiers.essenceHindrance === undefined &&
+        savedModifiers.focusHindrance !== undefined
+    ) {
+        savedModifiers.essenceHindrance = savedModifiers.focusHindrance;
+    }
+
+    delete savedModifiers.focusHindrance;
+
     const migratedSave = {
         ...defaults,
         ...save,
@@ -44,9 +57,21 @@ export function migrateSave(save) {
             ...defaults.status,
             ...(save.status || {})
         },
+        unlocks: {
+            ...defaults.unlocks,
+            ...(save.unlocks || {})
+        },
+        progression: {
+            ...defaults.progression,
+            ...(save.progression || {}),
+            triggers: {
+                ...defaults.progression.triggers,
+                ...(save.progression?.triggers || {})
+            }
+        },
         modifiers: {
             ...defaults.modifiers,
-            ...(save.modifiers || {})
+            ...savedModifiers
         },
         resources: {}
     };

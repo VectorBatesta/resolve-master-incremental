@@ -39,17 +39,38 @@ export function updateEffectsDisplay() {
     const statuses = document.getElementsByClassName("status");
 
     for (const status of statuses) {
-        const definition = STATUS_EFFECT_DEFINITIONS[status.id];
+        const definition = STATUS_EFFECT_DEFINITIONS[status.dataset.effectId];
 
         if (!definition) {
             continue;
         }
 
-        const buffTexts = definition.getBuffTexts(gameVariables);
-        const buffElements = status.getElementsByClassName("effect_buff_text");
+        const visible = definition.isVisible
+            ? definition.isVisible(gameVariables)
+            : true;
 
-        for (let i = 0; i < buffElements.length; i++) {
-            buffElements[i].textContent = buffTexts[i] || "";
+        status.style.display = visible ? "flex" : "none";
+
+        if (!visible) {
+            continue;
         }
+
+        const detailTexts = definition.getDetailTexts(gameVariables);
+        const detailElements = status.getElementsByClassName("effect_detail_text");
+
+        for (let i = 0; i < detailElements.length; i++) {
+            detailElements[i].textContent = detailTexts[i] || "";
+        }
+    }
+}
+
+export function updateButtonsDisplay() {
+    const condenseEssenceButton = document.getElementById("btn_condenseEssence");
+
+    if (condenseEssenceButton) {
+        condenseEssenceButton.classList.toggle(
+            "_visible",
+            gameVariables.unlocks.essenceCondensation
+        );
     }
 }
