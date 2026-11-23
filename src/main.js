@@ -7,6 +7,7 @@ import {
     stemBleeding
 } from "./game/actions.js";
 import { progressionDetection, purgeTabOpened } from "./game/progression.js";
+import { initializeExploration } from "./game/exploration.js";
 import { gameVariables } from "./game/state.js";
 import {
     loadGame,
@@ -26,9 +27,12 @@ import {
 import {
     updateButtonsDisplay,
     updateEffectsDisplay,
+    updateExplorationDisplay,
     updateResourcesDisplay,
     updateTabsDisplay
 } from "./ui/render.js";
+
+const DEBUG_MODE = new URLSearchParams(window.location.search).get("debug") === "1";
 
 function addWelcomeLore() {
     if (gameVariables.wipingSave) {
@@ -45,7 +49,7 @@ function createGameButtons() {
         "btn_absorbEssence",
         "Absorb Essence",
         absorbEssence,
-        500
+        DEBUG_MODE ? 50 : 500
     );
     newButton("btn_condenseEssence", "Condense Essence", condenseEssence);
     const btnSaveWipe = newButton("btn_saveWipe", "TERMINATE SAVE", saveWipe);
@@ -71,6 +75,11 @@ function createTabs() {
         screen(2);
         purgeTabOpened();
     });
+
+    newTabButton("tabButton_explore", "Retro-transposition", 3, () => {
+        screen(3);
+        updateExplorationDisplay();
+    });
 }
 
 function createStatusEffects() {
@@ -91,7 +100,7 @@ function createStatusEffects() {
 function gameOnLoad() {
     loadGame();
 
-    screen(1);
+    screen(gameVariables.exploration.active ? 3 : 1);
     addWelcomeLore();
     createGameButtons();
     createTabs();
@@ -103,6 +112,7 @@ function gameOnLoad() {
     updateTabsDisplay();
     progressionDetection();
     resumeSelfExamination();
+    initializeExploration();
 
     window.addEventListener("bleedingStemmed", () => {
         addLoreMessage("You are no longer on the verge of death.");

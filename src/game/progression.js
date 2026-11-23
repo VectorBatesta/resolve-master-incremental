@@ -51,6 +51,11 @@ export function progressionDetection() {
         updateTabsDisplay();
         updateButtonsDisplay();
     }
+
+    if (gameVariables.progression.triggers.bleedingStemmed && !gameVariables.unlocks.exploration) {
+        gameVariables.unlocks.exploration = true;
+        updateTabsDisplay();
+    }
 }
 
 export function purgeTabOpened() {

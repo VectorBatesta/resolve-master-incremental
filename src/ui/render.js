@@ -171,17 +171,65 @@ export function updateButtonsDisplay() {
             !gameVariables.progression.triggers.bleedingStemmed
         );
     }
+
 }
 
 export function updateTabsDisplay() {
     const coreTabButton = document.getElementById("tabButton_core");
     const purgeTabButton = document.getElementById("tabButton_purge");
+    const exploreTabButton = document.getElementById("tabButton_explore");
+
+    const tabsVisible = !gameVariables.exploration.active;
 
     if (coreTabButton) {
-        coreTabButton.classList.toggle("_visible", gameVariables.unlocks.purge);
+        coreTabButton.classList.toggle("_visible", gameVariables.unlocks.purge && tabsVisible);
     }
 
     if (purgeTabButton) {
-        purgeTabButton.classList.toggle("_visible", gameVariables.unlocks.purge);
+        purgeTabButton.classList.toggle("_visible", gameVariables.unlocks.purge && tabsVisible);
+    }
+
+    if (exploreTabButton) {
+        exploreTabButton.classList.toggle(
+            "_visible",
+            gameVariables.unlocks.exploration && tabsVisible
+        );
+    }
+}
+
+export function updateExplorationDisplay() {
+    const preparation = document.getElementById("explorationPreparation");
+    const explorationView = document.getElementById("explorationView");
+    const selectedAmount = document.getElementById("explorationEssenceAmount");
+    const fuel = document.getElementById("explorationFuel");
+    const hint = document.getElementById("movementHint");
+    const available = gameVariables.resources.condensedEssence.amount;
+
+    if (gameVariables.exploration.selectedEssence > available) {
+        gameVariables.exploration.selectedEssence = Math.floor(available * 2) / 2;
+    }
+
+    if (selectedAmount) {
+        selectedAmount.textContent = gameVariables.exploration.selectedEssence.toFixed(1);
+    }
+
+    if (fuel) {
+        fuel.textContent =
+            "Solidified Essence: " + gameVariables.exploration.carriedEssence.toFixed(1);
+    }
+
+    if (hint) {
+        hint.classList.toggle(
+            "_faded",
+            gameVariables.exploration.movementHintDismissed
+        );
+    }
+
+    if (preparation) {
+        preparation.style.display = gameVariables.exploration.active ? "none" : "flex";
+    }
+
+    if (explorationView) {
+        explorationView.style.display = gameVariables.exploration.active ? "flex" : "none";
     }
 }

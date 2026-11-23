@@ -67,22 +67,27 @@ export function newHoldableButton(IDname, texto, funcao, intervalTime, parentId 
 
     let intervalId;
 
-    function onHold() {
+    function onHold(event) {
         if (!intervalId) {
+            newDiv.setPointerCapture(event.pointerId);
+
             // Short taps intentionally do nothing. The action begins only after
             // the player has held the button for the configured interval.
             intervalId = setInterval(funcao, intervalTime);
         }
     }
 
-    function onRelease() {
+    function onRelease(event) {
         clearInterval(intervalId);
         intervalId = null;
+
+        if (newDiv.hasPointerCapture(event.pointerId)) {
+            newDiv.releasePointerCapture(event.pointerId);
+        }
     }
 
     newDiv.addEventListener("pointerdown", onHold);
     newDiv.addEventListener("pointerup", onRelease);
-    newDiv.addEventListener("pointerleave", onRelease);
     newDiv.addEventListener("pointercancel", onRelease);
 
     document.getElementById(parentId).appendChild(newDiv);

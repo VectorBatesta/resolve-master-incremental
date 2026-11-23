@@ -73,6 +73,10 @@ export function migrateSave(save) {
                 ...(save.progression?.stats || {})
             }
         },
+        exploration: {
+            ...defaults.exploration,
+            ...(save.exploration || {})
+        },
         modifiers: {
             ...defaults.modifiers,
             ...savedModifiers

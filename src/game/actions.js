@@ -13,7 +13,8 @@ import {
     flashStatusEffect,
     updateButtonsDisplay,
     updateEffectsDisplay,
-    updateResourcesDisplay
+    updateResourcesDisplay,
+    updateTabsDisplay
 } from "../ui/render.js";
 
 const SELF_EXAMINATION_REVEAL_INTERVAL_MS = 1500;
@@ -81,11 +82,13 @@ export function stemBleeding() {
 
     condensedEssence.amount -= cost;
     gameVariables.progression.triggers.bleedingStemmed = true;
+    gameVariables.unlocks.exploration = true;
 
     fixMaxAll();
     updateResourcesDisplay();
     updateEffectsDisplay();
     updateButtonsDisplay();
+    updateTabsDisplay();
 
     const event = new CustomEvent("bleedingStemmed");
     window.dispatchEvent(event);

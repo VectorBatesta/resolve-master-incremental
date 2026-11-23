@@ -1,6 +1,6 @@
 import { RESOURCE_DEFINITIONS } from "../data/resources.js";
 
-export const SAVE_VERSION = 6;
+export const SAVE_VERSION = 8;
 
 function createDefaultResources() {
     const resources = {};
@@ -29,7 +29,8 @@ export function createNewSave() {
         },
         unlocks: {
             essenceCondensation: false,
-            purge: false
+            purge: false,
+            exploration: false
         },
         progression: {
             triggers: {
@@ -45,6 +46,15 @@ export function createNewSave() {
                 condensationSuccesses: 0,
                 condensationFailures: 0
             }
+        },
+        exploration: {
+            active: false,
+            selectedEssence: 0.5,
+            carriedEssence: 0,
+            x: 0,
+            y: 0,
+            seed: 0,
+            movementHintDismissed: false
         },
         modifiers: {
             essenceHindrance: 100,
