@@ -59,38 +59,39 @@ li::marker{
     border: 1px dashed rgb(182, 182, 182);
 
     box-sizing: border-box;
+
+    display: flex;
 }
 
 
 
+#gameContent{
+    width: 100%;
+    flex-grow: 1;
 
-#tab1_divEsq{
-    width: 25%;
-
-
-    grid-template-columns: 1fr 1fr;
+    display: flex;
 }
 
-#tab1_divCent{
-    width: 40%;
-    
+#tabArea{
+    width: 65%;
+    height: 100%;
 }
 
-#tab1_divDir{
+#logColumn{
     width: 35%;
-    
 }
 
 
 
+#tab1_divEsq,
 #tab2_divEsq{
-    width: 40%;
+    width: 38.46%;
 }
 
-#tab2_divDir{
-    width: 60%;
+#tab1_divCent,
+#tab2_divCent{
+    width: 61.54%;
 }
-
 
 
 
@@ -128,10 +129,27 @@ li::marker{
 }
 
 
-.tab{
-    min-width: 100%;
+.tabButton{
+    min-width: 100px;
+    height: 100%;
 
-    flex-grow: 1;
+    border-right: 1px dashed rgb(182, 182, 182);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    user-select: none;
+}
+.tabButton._selected{
+    text-decoration: underline;
+}
+
+
+.tab{
+    width: 100%;
+    height: 100%;
 }
 
 
@@ -141,6 +159,7 @@ li::marker{
     display: flex;
 }
 .interactableButton:not(._visible),
+.tabButton:not(._visible),
 .tab:not(._visible){
     display: none
 }
@@ -190,8 +209,6 @@ li::marker{
 
 
 
-
-
 /* ul */
 .statusList{
     list-style-type: none;
@@ -206,6 +223,10 @@ li::marker{
     display: flex;
     flex-direction: column-reverse;
     justify-content: flex-start;
+}
+.purgeStatusList{
+    height: 100%;
+    flex-direction: column;
 }
 
 /* li - div*/
@@ -276,4 +297,102 @@ li::marker{
     padding-top: 10px;
 
     box-sizing: border-box;
+}
+
+
+
+/******************************/
+/** self examination effects **/
+/******************************/
+:root{
+    --curse-vignette-strength: 0;
+}
+
+#gameScreen::after{
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+
+    box-shadow: inset 0 0 160px 45px rgba(120, 0, 0, var(--curse-vignette-strength));
+    transition: box-shadow 0.8s ease;
+}
+
+.status.curseRevealFlash{
+    animation: curseRevealFlashAnimation 1s ease-out;
+}
+
+@keyframes curseRevealFlashAnimation{
+    0%{
+        background-color: rgb(255, 20, 20);
+        color: white;
+        box-shadow: 0 0 34px rgba(255, 0, 0, 1);
+    }
+    35%{
+        background-color: rgb(220, 0, 0);
+        color: white;
+        box-shadow: 0 0 28px rgba(255, 0, 0, 0.9);
+    }
+    100%{
+        background-color: transparent;
+        box-shadow: none;
+    }
+}
+
+.status.criticalCurse{
+    border: 2px solid rgba(255, 0, 0, 0.9);
+    padding: 6px;
+    background-color: rgba(100, 0, 0, 0.28);
+    box-shadow: 0 0 18px rgba(255, 0, 0, 0.35);
+    animation: criticalCursePulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes criticalCursePulse{
+    from{
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.25);
+    }
+    to{
+        box-shadow: 0 0 24px rgba(255, 0, 0, 0.6);
+    }
+}
+
+.costButton{
+    min-height: 62px;
+    height: auto;
+    flex-direction: column;
+}
+
+.costButton_cost{
+    font-size: 0.75em;
+    opacity: 0.8;
+}
+
+.costButton_action{
+    font-size: 1em;
+}
+
+.costButton_cost.costInsufficientFlash{
+    animation: costInsufficientFlashAnimation 0.65s ease-out;
+}
+
+@keyframes costInsufficientFlashAnimation{
+    0%, 45%{
+        color: rgb(255, 30, 30);
+        text-shadow: 0 0 10px rgba(255, 0, 0, 1);
+        opacity: 1;
+    }
+    100%{
+        color: inherit;
+        text-shadow: none;
+        opacity: 0.8;
+    }
+}
+
+.status.criticalCurse.curseRevealFlash{
+    animation: curseRevealFlashAnimation 1s ease-out;
+}
+
+.purgeStatusList{
+    overflow-y: auto;
 }

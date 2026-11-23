@@ -11,7 +11,8 @@ export const RESOURCE_DEFINITIONS = {
         },
         condensation: {
             cost: 5,
-            output: 1
+            output: 0.5,
+            guaranteedUntil: 1
         }
     },
     condensedEssence: {

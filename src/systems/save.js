@@ -67,6 +67,10 @@ export function migrateSave(save) {
             triggers: {
                 ...defaults.progression.triggers,
                 ...(save.progression?.triggers || {})
+            },
+            stats: {
+                ...defaults.progression.stats,
+                ...(save.progression?.stats || {})
             }
         },
         modifiers: {
